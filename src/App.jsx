@@ -1,4 +1,4 @@
-import React from 'react'; import ConnectWallet from './components/ConnectWallet'; import DeployHelloContract from './components/DeployHelloContract'; import './style.css'; import nftBanner from './banner1.png'; // ← مسیر درست تصویر
+import React from 'react'; import ConnectWallet from './components/ConnectWallet'; import DeployHelloContract from './components/DeployHelloContract'; import './style.css'; import nftBanner from './nft.jpg'; // ← مسیر درست تصویر
 function App() {
   return (<div className="app-container">
     {/* بنر NFT */}
