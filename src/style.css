@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: rgb(0, 255, 60);
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: rgb(11, 237, 67);
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+  background-color: #000;
+  color: rgb(10, 240, 98);
+}
+
+.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 1000;
+}
