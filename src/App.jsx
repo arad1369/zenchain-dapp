@@ -1,9 +1,9 @@
-import React from 'react'; import ConnectWallet from './components/ConnectWallet'; import DeployHelloContract from './components/DeployHelloContract'; import './style.css'; import nftBanner from './nft.jpg'; // ← مسیر درست تصویر
+import React from 'react'; import ConnectWallet from './components/ConnectWallet'; import DeployHelloContract from './components/DeployHelloContract'; import './style.css'; import nftBanner from './banner1.png'; // ← مسیر درست تصویر
 function App() {
   return (<div className="app-container">
     {/* بنر NFT */}
     <img src={nftBanner} alt="NFT Banner" style={{ width: '100%', maxHeight: 'auto', objectFit: 'cover' }} />
-    <h1>ZenChain DApp</h1>
+    <h1>0G deploy</h1>
     <ConnectWallet />
     <DeployHelloContract />
     {/* فوتر */}
