@@ -1,27 +1,98 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
 import abi from "../abi.json";
-import bytecode from '../bytecode.json'
-// مسیر رو با پروژه‌ات تنظیم کنimport bytecode from "../bytecode.json"; // مسیر رو با پروژه‌ات تنظیم کن
-const DeployHelloContract = ({ walletAddress }) => {
-  const [deployStatus, setDeployStatus] = useState(""); const [contractAddress, setContractAddress] = useState(""); const [txHash, setTxHash] = useState("");
+import bytecode from "../bytecode.json";
+import ConnectWallet from "./ConnectWallet";
+
+const DeployHelloContract = () => {
+  const [walletAddress, setWalletAddress] = useState("");
+  const [deployStatus, setDeployStatus] = useState("");
+  const [contractAddress, setContractAddress] = useState("");
+  const [txHash, setTxHash] = useState("");
+
   const handleDeploy = async () => {
     try {
-      if (!window.ethereum) { setDeployStatus("please install metamask"); return; }
-      // دیباگ: چک کن که walletAddress معتبره      console.log("walletAddress received:", walletAddress);      if (!walletAddress || typeof walletAddress !== "string" || walletAddress.length < 10) {        setDeployStatus("Please connect the wallet correctly first.");        return;      }
-      setDeployStatus("Deploying the contract..."); const provider = new ethers.BrowserProvider(window.ethereum); const signer = await provider.getSigner(); const network = await provider.getNetwork(); if (Number(network.chainId) !== 8408) { setDeployStatus("(Chain ID: 8408)plaes connect zenchain"); return; }
-      const factory = new ethers.ContractFactory(abi, bytecode.object || bytecode, signer); const contract = await factory.deploy(); const tx = await contract.waitForDeployment(); const address = await contract.getAddress(); setContractAddress(address); setTxHash(tx.transactionHash); setDeployStatus("Deployment was successful!");
-    } catch (err) { console.error("Error in deployment:", err); setDeployStatus("Error in deployment: " + err.message); }
+      if (!window.ethereum) {
+        setDeployStatus("Please install MetaMask");
+        return;
+      }
+
+      if (!walletAddress || walletAddress.length < 10) {
+        setDeployStatus("Please connect the wallet first.");
+        return;
+      }
+
+      setDeployStatus("Deploying the contract...");
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const network = await provider.getNetwork();
+      if (Number(network.chainId) !== 8408) {
+        setDeployStatus("Please connect to ZenChain (Chain ID: 8408)");
+        return;
+      }
+
+      const factory = new ethers.ContractFactory(abi, bytecode.object || bytecode, signer);
+      const contract = await factory.deploy();
+      const tx = await contract.waitForDeployment();
+      const address = await contract.getAddress();
+      setContractAddress(address);
+      setTxHash(tx.transactionHash);
+      setDeployStatus("Deployment successful!");
+    } catch (err) {
+      console.error("Deployment error:", err);
+      setDeployStatus("Error: " + err.message);
+    }
   };
-  return (<div style={{ textAlign: "center", marginTop: "20px" }}>
-    <button onClick={handleDeploy} style={{ padding: "10px 20px", fontSize: "16px", backgroundColor: "#ea09cf", color: "#1a1a1a", border: "none", cursor: "pointer", margin: "10px", }}
-    >
-      Deploy Hello Contract
-    </button>
-    {deployStatus && (<p style={{ color: deployStatus.includes("خطا") ? "red" : "#ea09cf", fontSize: "16px", marginTop: "10px" }}>
-      {deployStatus}
-    </p>)}
-    {contractAddress && (<p style={{ color: "#ea09cf", fontSize: "16px", marginTop: "10px" }}>address contract: {contractAddress}</p>)}
-    {txHash && <p style={{ color: "#ea09cf", fontSize: "16px", marginTop: "10px" }}>هش تراکنش: {txHash}</p>} </div>);
+
+  return (
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
+      <div style={{
+        backgroundColor: "#032d33ff",
+        borderRadius: "12px",
+        padding: "30px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+        width: "350px",
+        textAlign: "center"
+      }}>
+        <h2 style={{ color: "#0ff", marginBottom: "20px" }}>Deploy Hello Contract</h2>
+
+        {/* Connect Wallet inside the card */}
+        <ConnectWallet onConnect={(address) => setWalletAddress(address)} />
+
+        {/* Deploy Button */}
+        <button
+          onClick={handleDeploy}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#0ff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            color: "#000",
+            fontWeight: "bold",
+            marginTop: "10px"
+          }}
+        >
+          Deploy Contract
+        </button>
+
+        {/* Deployment Status */}
+        {deployStatus && (
+          <p style={{ color: "#0ff", marginTop: "10px" }}>{deployStatus}</p>
+        )}
+        {contractAddress && (
+          <p style={{ color: "#0ff", fontSize: "14px" }}>
+            Contract Address: {contractAddress}
+          </p>
+        )}
+        {txHash && (
+          <p style={{ color: "#0ff", fontSize: "14px" }}>
+            Tx Hash: {txHash}
+          </p>
+        )}
+      </div>
+    </div>
+  );
 };
+
 export default DeployHelloContract;
